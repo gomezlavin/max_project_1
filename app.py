@@ -5,7 +5,7 @@ import json
 import os
 import base64
 from dotenv import load_dotenv
-from prompts import ASSESSMENT_PROMPT, SYSTEM_PROMPT, USER_CONTEXT
+from prompts import SYSTEM_PROMPT
 
 # Load environment variables
 load_dotenv()
@@ -51,7 +51,6 @@ gen_kwargs = {
 
 # Configuration setting to enable or disable the system prompt
 ENABLE_SYSTEM_PROMPT = True
-ENABLE_USER_CONTEXT = False
 
 @cl.on_message
 async def on_message(message: cl.Message):
@@ -59,8 +58,6 @@ async def on_message(message: cl.Message):
 
     if ENABLE_SYSTEM_PROMPT and (not message_history or message_history[0].get("role") != "system"):
         system_prompt_content = SYSTEM_PROMPT
-        if ENABLE_USER_CONTEXT:
-            system_prompt_content += "\n" + USER_CONTEXT
         message_history.insert(0, {"role": "system", "content": system_prompt_content})
 
     message_history.append({"role": "user", "content": message.content})
